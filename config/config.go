@@ -107,6 +107,8 @@ type Config struct {
 
 	// SSO in settings for single-sign on
 	SSO SSOConfig `json:"sso,omitempty"`
+
+	NatsConfig NatsConfig `json:"natsConfig,omitempty"`
 }
 
 func (c Config) GetExecutor() *apiv1.Container {
@@ -237,6 +239,12 @@ type PostgreSQLConfig struct {
 	DatabaseConfig
 	SSL     bool   `json:"ssl,omitempty"`
 	SSLMode string `json:"sslMode,omitempty"`
+}
+
+type NatsConfig struct {
+	ServerUrl   string `json:"serverUrl,omitempty"`
+	SubjectName string `json:"subjectName,omitempty"`
+	Subject     string `json:"subject,omitempty"`
 }
 
 type MySQLConfig struct {

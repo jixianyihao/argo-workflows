@@ -72,6 +72,8 @@ require (
 	k8s.io/utils v0.0.0-20220210201930-3a6ce19ff2f9
 	sigs.k8s.io/yaml v1.3.0
 	upper.io/db.v3 v3.8.0+incompatible
+	github.com/nats-io/nats.go v1.25.0
+
 )
 
 require (
