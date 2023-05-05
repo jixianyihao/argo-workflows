@@ -17,7 +17,6 @@ permissions:
 jobs:
   build-linux-amd64:
     name: Build & push linux/amd64
-    if: github.repository == 'jixianyihao/argo-workflows'
     runs-on: ubuntu-latest
     strategy:
       matrix:
