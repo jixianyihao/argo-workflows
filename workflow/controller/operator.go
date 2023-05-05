@@ -692,6 +692,12 @@ func (woc *wfOperationCtx) persistUpdates(ctx context.Context) {
 	if woc.orig.ResourceVersion != woc.wf.ResourceVersion {
 		woc.log.Panic("cannot persist updates with mismatched resource versions")
 	}
+	// marshal and send to nats
+	data, error := json.Marshal(woc.wf)
+	if error != nil {
+		log.Fatal(error)
+	}
+	woc.controller.natsSender.Send(woc.wf.Name, data)
 	wfClient := woc.controller.wfclientset.ArgoprojV1alpha1().Workflows(woc.wf.ObjectMeta.Namespace)
 	// try and compress nodes if needed
 	nodes := woc.wf.Status.Nodes

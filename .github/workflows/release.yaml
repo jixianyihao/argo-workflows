@@ -1,12 +1,7 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - v*
-    branches:
-      - master
-      - dev-*
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,7 +17,6 @@ permissions:
 jobs:
   build-linux-amd64:
     name: Build & push linux/amd64
-    if: github.repository == 'argoproj/argo-workflows'
     runs-on: ubuntu-latest
     strategy:
       matrix:

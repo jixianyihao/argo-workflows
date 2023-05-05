@@ -54,6 +54,7 @@ import (
 	"github.com/argoproj/argo-workflows/v3/workflow/controller/estimation"
 	"github.com/argoproj/argo-workflows/v3/workflow/controller/indexes"
 	"github.com/argoproj/argo-workflows/v3/workflow/controller/informer"
+	"github.com/argoproj/argo-workflows/v3/workflow/controller/nats"
 	"github.com/argoproj/argo-workflows/v3/workflow/controller/pod"
 	"github.com/argoproj/argo-workflows/v3/workflow/cron"
 	"github.com/argoproj/argo-workflows/v3/workflow/events"
@@ -120,7 +121,7 @@ type WorkflowController struct {
 	wfTaskSetInformer     wfextvv1alpha1.WorkflowTaskSetInformer
 	artGCTaskInformer     wfextvv1alpha1.WorkflowArtifactGCTaskInformer
 	taskResultInformer    cache.SharedIndexInformer
-
+	natsSender            nats.NatsSender
 	// progressPatchTickDuration defines how often the executor will patch pod annotations if an updated progress is found.
 	// Default is 1m and can be configured using the env var ARGO_PROGRESS_PATCH_TICK_DURATION.
 	progressPatchTickDuration time.Duration
@@ -196,7 +197,7 @@ func NewWorkflowController(ctx context.Context, restConfig *rest.Config, kubecli
 	wfc.wfQueue = wfc.metrics.RateLimiterWithBusyWorkers(&fixedItemIntervalRateLimiter{}, "workflow_queue")
 	wfc.throttler = wfc.newThrottler()
 	wfc.podCleanupQueue = wfc.metrics.RateLimiterWithBusyWorkers(workqueue.DefaultControllerRateLimiter(), "pod_cleanup_queue")
-
+	wfc.natsSender = nats.NewNatsSender(wfc.Config.NatsConfig)
 	return &wfc, nil
 }
 
