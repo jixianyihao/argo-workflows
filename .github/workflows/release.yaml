@@ -183,7 +183,6 @@ jobs:
 
   build-windows:
     name: Build & push windows
-    if: github.repository == 'argoproj/argo-workflows'
     runs-on: windows-2019
     steps:
       - uses: actions/checkout@v3
@@ -232,7 +231,6 @@ jobs:
 
   push-images:
     name: Push manifest with all images
-    if: github.repository == 'argoproj/argo-workflows'
     runs-on: ubuntu-latest
     needs: [ build-linux-amd64, build-linux-arm64, build-windows ]
     steps:
@@ -291,7 +289,6 @@ jobs:
 
   test-images-linux-amd64:
     name: Try pulling linux/amd64
-    if: github.repository == 'argoproj/argo-workflows'
     runs-on: ubuntu-latest
     needs: [ push-images ]
     strategy:
@@ -329,7 +326,6 @@ jobs:
 
   test-images-windows:
     name: Try pulling windows
-    if: github.repository == 'argoproj/argo-workflows'
     runs-on: windows-2019
     needs: [ push-images ]
     steps:
@@ -366,7 +362,6 @@ jobs:
     permissions:
       contents: write  # for softprops/action-gh-release to create GitHub release
     runs-on: ubuntu-latest
-    if: github.repository == 'argoproj/argo-workflows'
     needs: [ push-images, test-images-linux-amd64, test-images-windows ]
     env:
       NODE_OPTIONS: --max-old-space-size=4096
