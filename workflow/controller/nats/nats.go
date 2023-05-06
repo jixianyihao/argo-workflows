@@ -23,13 +23,11 @@ type natsSender struct {
 func NewNatsSender(config config.NatsConfig) NatsSender {
 
 	// Create an unauthenticated connection to NATS.
-	nc, _ := nats.Connect(config.ServerUrl)
-
-	// Drain is a safe way to to ensure all buffered messages that were published
-	// are sent and all buffered messages received on a subscription are processed
-	// being closing the connection.
-	defer nc.Drain()
-
+	nc, errx := nats.Connect(config.ServerUrl)
+	if errx != nil {
+		log.WithError(errx).Error("nats connect failed")
+		return nil
+	}
 	js, _ := nc.JetStream()
 	cfg := nats.StreamConfig{
 		Name:     config.SubjectName,
