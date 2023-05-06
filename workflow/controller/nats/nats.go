@@ -51,12 +51,12 @@ func NewNatsSender(config config.NatsConfig) NatsSender {
 func (natsSender *natsSender) Send(workflowId string, workflow []byte) {
 	start := time.Now()
 	_, err := natsSender.JetStream.Publish(natsSender.StreamConfig.Name, workflow)
-	if err != nil {
-		log.Fatal("workflow pub failed err")
+	if err != nil {  
+	        log.WithError(err).Error("workflow pub failed err")
 	}
 	since := time.Since(start)
 
-	if since > 3*time.Second {
+	if since > 1*time.Second {
 		log.Warn("pub workflow  %s cost too long", workflowId)
 	}
 }
